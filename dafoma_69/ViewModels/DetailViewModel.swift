@@ -24,15 +24,13 @@ class DetailViewModel: ObservableObject {
     @Published var estimatedReadingTime: String = ""
     
     private let articleService: ArticleService
-    private let healthKitService: HealthKitService
     private var readingTimer: Timer?
     private var startTime: Date?
     
-    init(article: Article, articleService: ArticleService, healthKitService: HealthKitService) {
+    init(article: Article, articleService: ArticleService) {
         self.article = article
         self.isBookmarked = article.isBookmarked
         self.articleService = articleService
-        self.healthKitService = healthKitService
         
         loadQuizQuestions()
         loadRelatedArticles()
@@ -96,7 +94,6 @@ class DetailViewModel: ObservableObject {
             tags: article.tags,
             isBookmarked: isBookmarked,
             difficulty: article.difficulty,
-            healthRelated: article.healthRelated,
             imageURL: article.imageURL
         )
     }
@@ -196,10 +193,6 @@ class DetailViewModel: ObservableObject {
                 score += 2
             }
             
-            // Health-related articles get bonus if current is health-related
-            if article.healthRelated && otherArticle.healthRelated {
-                score += 5
-            }
             
             if score > 0 {
                 scored.append((article: otherArticle, score: score))
@@ -259,3 +252,4 @@ class DetailViewModel: ObservableObject {
         stopReadingTimer()
     }
 }
+

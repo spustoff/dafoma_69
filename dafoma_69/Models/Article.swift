@@ -17,11 +17,10 @@ struct Article: Identifiable, Codable, Hashable {
     let tags: [String]
     let isBookmarked: Bool
     let difficulty: DifficultyLevel
-    let healthRelated: Bool
     let imageURL: String?
     let dateCreated: Date
     
-    init(title: String, content: String, category: ArticleCategory, readingTime: Int, tags: [String], isBookmarked: Bool = false, difficulty: DifficultyLevel, healthRelated: Bool = false, imageURL: String? = nil) {
+    init(title: String, content: String, category: ArticleCategory, readingTime: Int, tags: [String], isBookmarked: Bool = false, difficulty: DifficultyLevel, imageURL: String? = nil) {
         self.title = title
         self.content = content
         self.category = category
@@ -29,7 +28,6 @@ struct Article: Identifiable, Codable, Hashable {
         self.tags = tags
         self.isBookmarked = isBookmarked
         self.difficulty = difficulty
-        self.healthRelated = healthRelated
         self.imageURL = imageURL
         self.dateCreated = Date()
     }
@@ -117,24 +115,4 @@ struct UserProgress: Codable {
     }
 }
 
-// MARK: - Health Insight
-struct HealthInsight: Identifiable, Codable {
-    let id = UUID()
-    let title: String
-    let description: String
-    let recommendedArticles: [UUID]
-    let healthMetric: String
-    let value: Double
-    let unit: String
-    let dateGenerated: Date
-    
-    init(title: String, description: String, recommendedArticles: [UUID], healthMetric: String, value: Double, unit: String) {
-        self.title = title
-        self.description = description
-        self.recommendedArticles = recommendedArticles
-        self.healthMetric = healthMetric
-        self.value = value
-        self.unit = unit
-        self.dateGenerated = Date()
-    }
-}
+

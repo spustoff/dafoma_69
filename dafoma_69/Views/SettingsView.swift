@@ -12,8 +12,8 @@ struct SettingsView: View {
     @State private var showingExportSheet = false
     @State private var exportedData = ""
     
-    init(healthKitService: HealthKitService) {
-        self._viewModel = StateObject(wrappedValue: SettingsViewModel(healthKitService: healthKitService))
+    init() {
+        self._viewModel = StateObject(wrappedValue: SettingsViewModel())
     }
     
     var body: some View {
@@ -50,9 +50,6 @@ struct SettingsView: View {
             }
             .sheet(isPresented: $showingExportSheet) {
                 ExportDataView(data: exportedData)
-            }
-            .sheet(isPresented: $viewModel.showingHealthKitInfo) {
-                HealthKitInfoView()
             }
         }
     }
@@ -173,48 +170,6 @@ struct SettingsView: View {
         }
     }
     
-    private var healthSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Text("Health Integration")
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.cognityTextPrimary)
-                
-                Spacer()
-                
-                Button(action: { viewModel.showingHealthKitInfo = true }) {
-                    Image(systemName: "info.circle")
-                        .foregroundColor(.cognityTextSecondary)
-                }
-            }
-            
-            VStack(spacing: 12) {
-                SettingsToggleRow(
-                    title: "HealthKit Integration",
-                    subtitle: viewModel.healthKitEnabled ? "Connected" : "Connect for personalized insights",
-                    icon: "heart.fill",
-                    color: .red,
-                    isOn: $viewModel.healthKitEnabled
-                )
-                
-                if viewModel.healthKitEnabled {
-                    SettingsRow(
-                        title: "Health Data Privacy",
-                        subtitle: "Manage your health data permissions",
-                        icon: "lock.shield.fill",
-                        color: .blue
-                    ) {
-                        Button("Manage") {
-                            // Open Health app or settings
-                        }
-                        .font(.caption)
-                        .foregroundColor(.cognityPrimary)
-                    }
-                }
-            }
-        }
-    }
     
     private var dataSection: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -467,94 +422,7 @@ struct ExportDataView: View {
     }
 }
 
-struct HealthKitInfoView: View {
-    @Environment(\.dismiss) private var dismiss
-    
-    var body: some View {
-        NavigationView {
-            ScrollView(.vertical, showsIndicators: true) {
-                VStack(alignment: .leading, spacing: 20) {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("HealthKit Integration")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .foregroundColor(.cognityTextPrimary)
-                        
-                        Text("CognityPin uses HealthKit to provide personalized health insights and article recommendations based on your wellness data.")
-                            .font(.body)
-                            .foregroundColor(.cognityTextSecondary)
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Data We Access")
-                            .font(.headline)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.cognityTextPrimary)
-                        
-                        VStack(alignment: .leading, spacing: 8) {
-                            HealthDataRow(icon: "figure.walk", title: "Step Count", description: "Daily activity levels")
-                            HealthDataRow(icon: "heart.fill", title: "Heart Rate", description: "Cardiovascular health metrics")
-                            HealthDataRow(icon: "bed.double.fill", title: "Sleep Analysis", description: "Sleep duration and quality")
-                            HealthDataRow(icon: "flame.fill", title: "Active Energy", description: "Calories burned during activities")
-                        }
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Privacy & Security")
-                            .font(.headline)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.cognityTextPrimary)
-                        
-                        Text("• All health data remains on your device\n• Data is never shared with third parties\n• You can revoke access at any time\n• Only aggregated, anonymized insights are generated")
-                            .font(.body)
-                            .foregroundColor(.cognityTextSecondary)
-                    }
-                }
-                .padding(20)
-            }
-            .background(Color.cognityBackground)
-            .navigationTitle("Health Integration")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                    .foregroundColor(.cognityPrimary)
-                }
-            }
-        }
-    }
-}
-
-struct HealthDataRow: View {
-    let icon: String
-    let title: String
-    let description: String
-    
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: icon)
-                .font(.title3)
-                .foregroundColor(.cognitySecondary)
-                .frame(width: 30)
-            
-            VStack(alignment: .leading, spacing: 2) {
-                Text(title)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundColor(.cognityTextPrimary)
-                
-                Text(description)
-                    .font(.caption)
-                    .foregroundColor(.cognityTextSecondary)
-            }
-            
-            Spacer()
-        }
-    }
-}
 
 #Preview {
-    SettingsView(healthKitService: HealthKitService())
+    SettingsView()
 }

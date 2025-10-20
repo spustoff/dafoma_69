@@ -208,26 +208,6 @@ struct OnboardingPageView: View {
                     .background(Color.cognityCardBackground)
                     .cornerRadius(12)
                     
-                    // HealthKit toggle
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Health Insights")
-                                .font(.headline)
-                                .foregroundColor(.cognityTextPrimary)
-                            Text("Connect HealthKit for personalized recommendations")
-                                .font(.caption)
-                                .foregroundColor(.cognityTextSecondary)
-                        }
-                        
-                        Spacer()
-                        
-                        Toggle("", isOn: $viewModel.healthKitEnabled)
-                            .tint(.cognitySecondary)
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    .background(Color.cognityCardBackground)
-                    .cornerRadius(12)
                 }
                 .padding(.horizontal, 20)
             }

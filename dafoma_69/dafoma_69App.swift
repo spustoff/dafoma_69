@@ -11,7 +11,6 @@ import SwiftUI
 struct CognityPinApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @StateObject private var articleService = ArticleService()
-    @StateObject private var healthKitService = HealthKitService()
     
     @State var isFetched: Bool = false
     
@@ -34,7 +33,7 @@ struct CognityPinApp: App {
                         
                         Group {
                             if hasCompletedOnboarding {
-                                ContentView(articleService: articleService, healthKitService: healthKitService)
+                                ContentView(articleService: articleService)
                             } else {
                                 OnboardingView()
                             }

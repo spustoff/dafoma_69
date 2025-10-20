@@ -14,18 +14,15 @@ class HomeViewModel: ObservableObject {
     @Published var selectedCategory: ArticleCategory? = nil
     @Published var filteredArticles: [Article] = []
     @Published var featuredArticles: [Article] = []
-    @Published var healthInsights: [HealthInsight] = []
     @Published var userProgress = UserProgress()
     @Published var isLoading = false
     @Published var showingCategoryFilter = false
     
     private let articleService: ArticleService
-    private let healthKitService: HealthKitService
     private var cancellables = Set<AnyCancellable>()
     
-    init(articleService: ArticleService, healthKitService: HealthKitService) {
+    init(articleService: ArticleService) {
         self.articleService = articleService
-        self.healthKitService = healthKitService
         
         setupBindings()
         loadUserProgress()
@@ -52,10 +49,6 @@ class HomeViewModel: ObservableObject {
             .assign(to: \.featuredArticles, on: self)
             .store(in: &cancellables)
         
-        // Bind health insights
-        healthKitService.$healthInsights
-            .assign(to: \.healthInsights, on: self)
-            .store(in: &cancellables)
     }
     
     private func filterArticles(searchText: String, category: ArticleCategory?) {
@@ -83,7 +76,6 @@ class HomeViewModel: ObservableObject {
         
         // Simulate network delay
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.healthKitService.refreshHealthData()
             self.isLoading = false
         }
     }
@@ -149,11 +141,6 @@ class HomeViewModel: ObservableObject {
         // Simple recommendation algorithm
         var recommended: [Article] = []
         
-        // Add health-related articles if user has health insights
-        if !healthInsights.isEmpty {
-            recommended.append(contentsOf: articleService.getHealthRelatedArticles().prefix(2))
-        }
-        
         // Add articles from categories the user has read before
         let readArticles = articleService.articles.filter { userProgress.articlesRead.contains($0.id) }
         let preferredCategories = Set(readArticles.map { $0.category })
@@ -201,3 +188,4 @@ class HomeViewModel: ObservableObject {
         }
     }
 }
+

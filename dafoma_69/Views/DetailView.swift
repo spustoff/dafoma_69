@@ -12,8 +12,8 @@ struct DetailView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var scrollOffset: CGFloat = 0
     
-    init(article: Article, articleService: ArticleService, healthKitService: HealthKitService) {
-        self._viewModel = StateObject(wrappedValue: DetailViewModel(article: article, articleService: articleService, healthKitService: healthKitService))
+    init(article: Article, articleService: ArticleService) {
+        self._viewModel = StateObject(wrappedValue: DetailViewModel(article: article, articleService: articleService))
     }
     
     var body: some View {
@@ -575,10 +575,9 @@ struct ScrollOffsetPreferenceKey: PreferenceKey {
             category: .health,
             readingTime: 5,
             tags: ["sample", "test"],
-            difficulty: .beginner,
-            healthRelated: true
+            difficulty: .beginner
         ),
-        articleService: ArticleService(),
-        healthKitService: HealthKitService()
+        articleService: ArticleService()
     )
 }
+

@@ -9,14 +9,12 @@ import SwiftUI
 
 struct HomeView: View {
     let articleService: ArticleService
-    let healthKitService: HealthKitService
     @StateObject private var viewModel: HomeViewModel
     @State private var selectedArticle: Article?
     
-    init(articleService: ArticleService, healthKitService: HealthKitService) {
+    init(articleService: ArticleService) {
         self.articleService = articleService
-        self.healthKitService = healthKitService
-        self._viewModel = StateObject(wrappedValue: HomeViewModel(articleService: articleService, healthKitService: healthKitService))
+        self._viewModel = StateObject(wrappedValue: HomeViewModel(articleService: articleService))
     }
     
     var body: some View {
@@ -30,10 +28,6 @@ struct HomeView: View {
                         // Header with search
                         headerSection
                         
-                        // Health insights (if available)
-                        if !viewModel.healthInsights.isEmpty {
-                            healthInsightsSection
-                        }
                         
                         // Featured articles
                         featuredArticlesSection
@@ -53,7 +47,7 @@ struct HomeView: View {
             }
             .navigationBarHidden(true)
             .sheet(item: $selectedArticle) { article in
-                DetailView(article: article, articleService: articleService, healthKitService: healthKitService)
+                DetailView(article: article, articleService: articleService)
             }
             .sheet(isPresented: $viewModel.showingCategoryFilter) {
                 CategoryFilterView(viewModel: viewModel)
@@ -127,31 +121,6 @@ struct HomeView: View {
         .padding(.top, 10)
     }
     
-    private var healthInsightsSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Health Insights")
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.cognityTextPrimary)
-                
-                Spacer()
-                
-                Image(systemName: "heart.fill")
-                    .foregroundColor(.cognitySecondary)
-            }
-            
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach(viewModel.healthInsights) { insight in
-                        HealthInsightCard(insight: insight)
-                    }
-                }
-                .padding(.horizontal, 16)
-            }
-            .padding(.horizontal, -16)
-        }
-    }
     
     private var featuredArticlesSection: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -239,37 +208,6 @@ struct HomeView: View {
 }
 
 // MARK: - Supporting Views
-
-struct HealthInsightCard: View {
-    let insight: HealthInsight
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text(insight.title)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.cognityTextPrimary)
-                
-                Spacer()
-                
-                Text("\(Int(insight.value)) \(insight.unit)")
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundColor(.cognitySecondary)
-            }
-            
-            Text(insight.description)
-                .font(.caption)
-                .foregroundColor(.cognityTextSecondary)
-                .lineLimit(3)
-        }
-        .padding(12)
-        .frame(width: 200)
-        .background(Color.cognityCardBackground)
-        .cornerRadius(12)
-    }
-}
 
 struct FeaturedArticleCard: View {
     let article: Article
@@ -566,5 +504,5 @@ struct CategoryFilterRow: View {
 }
 
 #Preview {
-    HomeView(articleService: ArticleService(), healthKitService: HealthKitService())
+    HomeView(articleService: ArticleService())
 }

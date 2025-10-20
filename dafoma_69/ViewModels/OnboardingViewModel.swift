@@ -15,7 +15,6 @@ class OnboardingViewModel: ObservableObject {
     // User preferences set during onboarding
     @Published var selectedColorScheme: ColorScheme? = nil
     @Published var notificationsEnabled = false
-    @Published var healthKitEnabled = false
     
     let onboardingPages = [
         OnboardingPage(
@@ -24,13 +23,6 @@ class OnboardingViewModel: ObservableObject {
             description: "Discover a vast library of articles across Health, Science, Technology, and more. Learn at your own pace with personalized recommendations.",
             imageName: "brain.head.profile",
             color: Color.cognityPrimary
-        ),
-        OnboardingPage(
-            title: "Health Insights",
-            subtitle: "Powered by HealthKit",
-            description: "Connect with HealthKit to receive personalized health insights and article recommendations based on your wellness data.",
-            imageName: "heart.fill",
-            color: Color.cognitySecondary
         ),
         OnboardingPage(
             title: "Interactive Learning",
@@ -76,7 +68,6 @@ class OnboardingViewModel: ObservableObject {
         // Save user preferences
         UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
         UserDefaults.standard.set(notificationsEnabled, forKey: "notificationsEnabled")
-        UserDefaults.standard.set(healthKitEnabled, forKey: "healthKitEnabled")
         
         if let colorScheme = selectedColorScheme {
             UserDefaults.standard.set(colorScheme == .dark ? "dark" : "light", forKey: "selectedColorScheme")
@@ -108,3 +99,4 @@ struct OnboardingPage {
     let imageName: String
     let color: Color
 }
+

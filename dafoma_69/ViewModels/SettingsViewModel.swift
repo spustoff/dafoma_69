@@ -16,14 +16,6 @@ class SettingsViewModel: ObservableObject {
         }
     }
     
-    @Published var healthKitEnabled: Bool {
-        didSet {
-            UserDefaults.standard.set(healthKitEnabled, forKey: "healthKitEnabled")
-            if healthKitEnabled {
-                healthKitService.requestAuthorization()
-            }
-        }
-    }
     
     @Published var selectedColorScheme: ColorScheme? {
         didSet {
@@ -55,17 +47,13 @@ class SettingsViewModel: ObservableObject {
     
     @Published var userProgress = UserProgress()
     @Published var showingDeleteAccountAlert = false
-    @Published var showingHealthKitInfo = false
     
-    private let healthKitService: HealthKitService
     private var cancellables = Set<AnyCancellable>()
     
-    init(healthKitService: HealthKitService) {
-        self.healthKitService = healthKitService
+    init() {
         
         // Load saved preferences
         self.notificationsEnabled = UserDefaults.standard.bool(forKey: "notificationsEnabled")
-        self.healthKitEnabled = UserDefaults.standard.bool(forKey: "healthKitEnabled")
         self.readingReminders = UserDefaults.standard.bool(forKey: "readingReminders")
         self.dailyReadingGoal = UserDefaults.standard.object(forKey: "dailyReadingGoal") as? Int ?? 3
         
@@ -85,14 +73,6 @@ class SettingsViewModel: ObservableObject {
         }
         
         loadUserProgress()
-        setupBindings()
-    }
-    
-    private func setupBindings() {
-        // Bind HealthKit authorization status
-        healthKitService.$isAuthorized
-            .assign(to: \.healthKitEnabled, on: self)
-            .store(in: &cancellables)
     }
     
     private func loadUserProgress() {
@@ -112,7 +92,6 @@ class SettingsViewModel: ObservableObject {
             "SavedQuestions",
             "hasCompletedOnboarding",
             "notificationsEnabled",
-            "healthKitEnabled",
             "selectedColorScheme",
             "fontSize",
             "readingReminders",
@@ -126,7 +105,6 @@ class SettingsViewModel: ObservableObject {
         // Reset to default values
         userProgress = UserProgress()
         notificationsEnabled = false
-        healthKitEnabled = false
         selectedColorScheme = nil
         fontSize = .medium
         readingReminders = false

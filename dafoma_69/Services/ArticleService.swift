@@ -41,9 +41,6 @@ class ArticleService: ObservableObject {
         }
     }
     
-    func getHealthRelatedArticles() -> [Article] {
-        return articles.filter { $0.healthRelated }
-    }
     
     func getQuizQuestions(for articleId: UUID) -> [QuizQuestion] {
         return quizQuestions.filter { $0.articleId == articleId }
@@ -59,7 +56,6 @@ class ArticleService: ObservableObject {
                 tags: article.tags,
                 isBookmarked: !article.isBookmarked,
                 difficulty: article.difficulty,
-                healthRelated: article.healthRelated,
                 imageURL: article.imageURL
             )
             saveData()
@@ -89,8 +85,7 @@ class ArticleService: ObservableObject {
                 category: .health,
                 readingTime: 5,
                 tags: ["heart rate", "cardiovascular", "stress", "wellness"],
-                difficulty: .intermediate,
-                healthRelated: true
+                difficulty: .intermediate
             ),
             Article(
                 title: "The Science of Sleep Cycles",
@@ -112,8 +107,7 @@ class ArticleService: ObservableObject {
                 category: .health,
                 readingTime: 4,
                 tags: ["sleep", "cycles", "REM", "recovery"],
-                difficulty: .beginner,
-                healthRelated: true
+                difficulty: .beginner
             )
         ]
         
@@ -135,8 +129,7 @@ class ArticleService: ObservableObject {
                 category: .science,
                 readingTime: 6,
                 tags: ["quantum", "physics", "entanglement", "computing"],
-                difficulty: .advanced,
-                healthRelated: false
+                difficulty: .advanced
             )
         ]
         
@@ -164,8 +157,7 @@ class ArticleService: ObservableObject {
                 category: .technology,
                 readingTime: 7,
                 tags: ["AI", "machine learning", "future", "innovation"],
-                difficulty: .intermediate,
-                healthRelated: false
+                difficulty: .intermediate
             )
         ]
         
@@ -193,8 +185,7 @@ class ArticleService: ObservableObject {
                 category: .psychology,
                 readingTime: 5,
                 tags: ["habits", "behavior", "psychology", "change"],
-                difficulty: .intermediate,
-                healthRelated: true
+                difficulty: .intermediate
             )
         ]
         
@@ -241,3 +232,4 @@ class ArticleService: ObservableObject {
         }
     }
 }
+

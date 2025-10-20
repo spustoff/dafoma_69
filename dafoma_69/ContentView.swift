@@ -9,21 +9,19 @@ import SwiftUI
 
 struct ContentView: View {
     let articleService: ArticleService
-    let healthKitService: HealthKitService
     
     @State private var selectedTab = 0
     @StateObject private var homeViewModel: HomeViewModel
     
-    init(articleService: ArticleService, healthKitService: HealthKitService) {
+    init(articleService: ArticleService) {
         self.articleService = articleService
-        self.healthKitService = healthKitService
-        self._homeViewModel = StateObject(wrappedValue: HomeViewModel(articleService: articleService, healthKitService: healthKitService))
+        self._homeViewModel = StateObject(wrappedValue: HomeViewModel(articleService: articleService))
     }
     
     var body: some View {
         TabView(selection: $selectedTab) {
             // Home Tab
-            HomeView(articleService: articleService, healthKitService: healthKitService)
+            HomeView(articleService: articleService)
                 .tabItem {
                     Image(systemName: selectedTab == 0 ? "house.fill" : "house")
                     Text("Home")
@@ -31,7 +29,7 @@ struct ContentView: View {
                 .tag(0)
             
             // Categories Tab
-            CategoriesView(articleService: articleService, healthKitService: healthKitService)
+            CategoriesView(articleService: articleService)
                 .tabItem {
                     Image(systemName: selectedTab == 1 ? "square.grid.2x2.fill" : "square.grid.2x2")
                     Text("Categories")
@@ -39,7 +37,7 @@ struct ContentView: View {
                 .tag(1)
             
             // Bookmarks Tab
-            BookmarksView(articleService: articleService, healthKitService: healthKitService)
+            BookmarksView(articleService: articleService)
                 .tabItem {
                     Image(systemName: selectedTab == 2 ? "bookmark.fill" : "bookmark")
                     Text("Bookmarks")
@@ -47,7 +45,7 @@ struct ContentView: View {
                 .tag(2)
             
             // Settings Tab
-            SettingsView(healthKitService: healthKitService)
+            SettingsView()
                 .tabItem {
                     Image(systemName: selectedTab == 3 ? "gearshape.fill" : "gearshape")
                     Text("Settings")
@@ -66,7 +64,6 @@ struct ContentView: View {
 // MARK: - Categories View
 struct CategoriesView: View {
     let articleService: ArticleService
-    let healthKitService: HealthKitService
     @State private var selectedArticle: Article?
     
     var body: some View {
@@ -93,7 +90,7 @@ struct CategoriesView: View {
             .navigationTitle("Categories")
             .navigationBarTitleDisplayMode(.large)
             .sheet(item: $selectedArticle) { article in
-                DetailView(article: article, articleService: articleService, healthKitService: healthKitService)
+                DetailView(article: article, articleService: articleService)
             }
         }
     }
@@ -202,7 +199,6 @@ struct CategoryArticleRow: View {
 // MARK: - Bookmarks View
 struct BookmarksView: View {
     let articleService: ArticleService
-    let healthKitService: HealthKitService
     @State private var selectedArticle: Article?
     
     var bookmarkedArticles: [Article] {
@@ -256,12 +252,12 @@ struct BookmarksView: View {
             .navigationTitle("Bookmarks")
             .navigationBarTitleDisplayMode(.large)
             .sheet(item: $selectedArticle) { article in
-                DetailView(article: article, articleService: articleService, healthKitService: healthKitService)
+                DetailView(article: article, articleService: articleService)
             }
         }
     }
 }
 
 #Preview {
-    ContentView(articleService: ArticleService(), healthKitService: HealthKitService())
+    ContentView(articleService: ArticleService())
 }
