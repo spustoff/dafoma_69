@@ -226,6 +226,21 @@ struct SettingsView: View {
                     EmptyView()
                 }
             }
+            
+            VStack(spacing: 12) {
+                SettingsRow(
+                    title: "Medical Data Source",
+                    subtitle: "Click for learn",
+                    icon: "info.circle.fill",
+                    color: .cognityPrimary
+                ) {
+                    
+                }
+            }
+            .onTapGesture {
+                
+                UIApplication.shared.open(URL(string: "https://www.cilvektiesibugids.lv/en/themes/data-privacy/medical-data/what-is-medical-data")!)
+            }
         }
     }
     
